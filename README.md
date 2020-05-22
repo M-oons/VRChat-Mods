@@ -1,1 +1,1 @@
-# VRChat-Mods
+# VRChat Mods
