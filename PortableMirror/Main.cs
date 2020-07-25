@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Collections;
 using MelonLoader;
@@ -59,9 +59,10 @@ namespace PortableMirror
                 _mirror.transform.position = new Vector3(_mirror.transform.position.x, _mirror.transform.position.y + ((_mirrorScaleY - _oldMirrorScaleY) / 2), _mirror.transform.position.z);
                 _mirror.GetOrAddComponent<VRC_MirrorReflection>().m_ReflectLayers = new LayerMask
                 {
-                    value = _optimizedMirror ? 263680 : -1025
+                    value = _optimizedMirror ? 263680 : -5153
                 };
                 _mirror.GetOrAddComponent<VRC_Pickup>().pickupable = _canPickupMirror;
+                _mirror.layer = _canPickupMirror ? 0 : 10;
             }
         }
 
@@ -73,7 +74,7 @@ namespace PortableMirror
             {
                 if (Utils.GetVRCPlayer() == null) return;
                 ToggleMirror();
-            }));      
+            }));
         }
 
         public override void OnUpdate()
@@ -110,9 +111,10 @@ namespace PortableMirror
                 mirror.GetOrAddComponent<MeshRenderer>().material.shader = Shader.Find("FX/MirrorReflection");
                 mirror.GetOrAddComponent<VRC_MirrorReflection>().m_ReflectLayers = new LayerMask
                 {
-                    value = _optimizedMirror ? 263680 : -1025
+                    value = _optimizedMirror ? 263680 : -5153
                 };
                 mirror.GetOrAddComponent<VRC_Pickup>().proximity = 0.3f;
+                mirror.layer = _canPickupMirror ? 0 : 10; //10 - Hides the new mirror from reflecting in other mirrors. 0 - Needs to be in an interactable layer when picked up
                 mirror.GetOrAddComponent<VRC_Pickup>().pickupable = _canPickupMirror;
                 mirror.GetOrAddComponent<VRC_Pickup>().allowManipulationWhenEquipped = false;
                 mirror.GetOrAddComponent<Rigidbody>().useGravity = false;
