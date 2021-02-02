@@ -47,7 +47,7 @@ namespace ComfyVRMenu
             else if (type == Il2CppType.Of<VRCVrCameraUnity>())
             {
                 VRCVrCameraUnity unity = camera.Cast<VRCVrCameraUnity>();
-                return unity.CameraStereo.transform.position;
+                return unity.field_Public_Camera_0.transform.position;
             }
             else if (type == Il2CppType.Of<VRCVrCameraWave>())
             {
@@ -61,7 +61,7 @@ namespace ComfyVRMenu
         {
             VRCVrCamera camera = GetVRCVrCamera();
             var type = camera.GetIl2CppType();
-            if (type == Il2CppType.Of<VRCVrCameraGoogle>())
+            if (type == Il2CppType.Of<MonoBehaviour1PublicRaQuRaVeVoRaVe17Vo17Unique>())
             {
                 return camera.transform.localPosition;
             }
@@ -90,12 +90,12 @@ namespace ComfyVRMenu
                     return camera.transform.localPosition + InputTracking.GetLocalPosition(XRNode.CenterEye);
                 }
                 VRCVrCameraUnity unity = camera.Cast<VRCVrCameraUnity>();
-                return camera.transform.parent.InverseTransformPoint(unity.CameraStereo.transform.position);
+                return camera.transform.parent.InverseTransformPoint(unity.field_Public_Camera_0.transform.position);
             }
             else if (type == Il2CppType.Of<VRCVrCameraWave>())
             {
                 VRCVrCameraWave wave = camera.Cast<VRCVrCameraWave>();
-                return wave.trackingRoot.InverseTransformPoint(camera.transform.position);
+                return wave.field_Public_Transform_0.InverseTransformPoint(camera.transform.position);
             }
             return Vector3.zero;
         }
