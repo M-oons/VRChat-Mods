@@ -6,7 +6,7 @@ using UIExpansionKit.API;
 using UnityEngine;
 using VRCSDK2;
 
-[assembly: MelonModInfo(typeof(PortableMirror.Main), "PortableMirror", "1.2.5", "M-oons,Nirvash")]
+[assembly: MelonModInfo(typeof(PortableMirror.Main), "PortableMirrorMod", "1.2.5", "M-oons,Nirvash")] //Name changed to break auto update
 [assembly: MelonModGame("VRChat", "VRChat")]
 
 namespace PortableMirror
