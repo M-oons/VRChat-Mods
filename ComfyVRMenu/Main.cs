@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Reflection;
 using MelonLoader;
 using UnhollowerRuntimeLib.XrefScans;
@@ -9,7 +10,7 @@ namespace ComfyVRMenu
     public static class ModInfo
     {
         public const string NAME = "ComfyVRMenu";
-        public const string VERSION = "1.0.1";
+        public const string VERSION = "1.0.2";
     }
 
     public class Main : MelonMod
@@ -111,8 +112,8 @@ namespace ComfyVRMenu
                         foreach (var x in xrefs)
                         {
                             if (x.Type == XrefType.Method && x.TryResolve() != null && 
-                                x.TryResolve().GetParameters().Length == 1 && 
-                                x.TryResolve().GetParameters()[0].ParameterType == typeof(bool))
+                                x.TryResolve().GetParameters().Length == 2 && 
+                                x.TryResolve().GetParameters().All(a => a.ParameterType == typeof(bool)))
                             {
                                 _placeUi = (MethodInfo)x.TryResolve();
                                 break;
