@@ -31,7 +31,7 @@ namespace PortableMirror
             _canPickupMirror = ModPrefs.GetBool("PortableMirror", "CanPickupMirror");
             _mirrorKeybind = Utils.GetMirrorKeybind();
 
-            MelonModLogger.Log("Settings can be configured in UserData\\modprefs.ini");
+            MelonModLogger.Log("Settings can be configured in UserData\\MelonPreferences.cfg");
             MelonModLogger.Log($"[{_mirrorKeybind}] -> Toggle portable mirror");
 
             MelonMod uiExpansionKit = MelonLoader.Main.Mods.Find(m => m.InfoAttribute.Name == "UI Expansion Kit");
