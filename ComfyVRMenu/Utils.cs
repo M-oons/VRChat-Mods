@@ -61,11 +61,7 @@ namespace ComfyVRMenu
         {
             VRCVrCamera camera = GetVRCVrCamera();
             var type = camera.GetIl2CppType();
-            if (type == Il2CppType.Of<MonoBehaviour1PublicRaQuRaVeVoRaVe17Vo17Unique>())
-            {
-                return camera.transform.localPosition;
-            }
-            else if (type == Il2CppType.Of<VRCVrCameraSteam>())
+            if (type == Il2CppType.Of<VRCVrCameraSteam>())
             {
                 VRCVrCameraSteam steam = camera.Cast<VRCVrCameraSteam>();
                 Transform transform1 = steam.field_Private_Transform_0;
@@ -97,7 +93,7 @@ namespace ComfyVRMenu
                 VRCVrCameraWave wave = camera.Cast<VRCVrCameraWave>();
                 return wave.field_Public_Transform_0.InverseTransformPoint(camera.transform.position);
             }
-            return Vector3.zero;
+            return camera.transform.localPosition;
         }
     }
 }
