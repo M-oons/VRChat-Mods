@@ -2,7 +2,7 @@ using System.Linq;
 using System.Reflection;
 using MelonLoader;
 using UnhollowerRuntimeLib.XrefScans;
-using Harmony;
+using HarmonyLib;
 using UnityEngine;
 
 namespace ComfyVRMenu
@@ -22,7 +22,7 @@ namespace ComfyVRMenu
 
             _comfyVRMenu = MelonPreferences.GetEntryValue<bool>("ComfyVRMenu", "EnableComfyVRMenu");
 
-            var harmony = HarmonyInstance.Create("ComfyVRMenu");
+            var harmony = new HarmonyLib.Harmony("ComfyVRMenu");
 
             var method = PlaceUiMethod;
             if (method == null)
