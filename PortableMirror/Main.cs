@@ -1,56 +1,60 @@
 using System;
 using System.Linq;
 using System.Collections;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using MelonLoader;
 using UIExpansionKit.API;
 using UnityEngine;
 using VRCSDK2;
 
+[assembly: AssemblyTitle("PortableMirror")]
+[assembly: AssemblyProduct("PortableMirror")]
+[assembly: ComVisible(false)]
+[assembly: AssemblyVersion("1.2.0")]
+[assembly: AssemblyFileVersion("1.2.0")]
+[assembly: MelonInfo(typeof(PortableMirror.Main), "PortableMirror", "1.2.0", "M-oons", "https://github.com/M-oons/VRChat-Mods")]
+[assembly: MelonGame("VRChat", "VRChat")]
+
 namespace PortableMirror
 {
-    public static class ModInfo
-    {
-        public const string NAME = "PortableMirror";
-        public const string VERSION = "1.2.0";
-    }
-
     public class Main : MelonMod
     {
         public override void OnApplicationStart()
         {
-            ModPrefs.RegisterCategory("PortableMirror", "PortableMirror");
-            ModPrefs.RegisterPrefFloat("PortableMirror", "MirrorScaleX", 5f, "Mirror Scale X");
-            ModPrefs.RegisterPrefFloat("PortableMirror", "MirrorScaleY", 3f, "Mirror Scale Y");
-            ModPrefs.RegisterPrefBool("PortableMirror", "OptimizedMirror", false, "Optimized Mirror");
-            ModPrefs.RegisterPrefBool("PortableMirror", "CanPickupMirror", false, "Can Pickup Mirror");
-            ModPrefs.RegisterPrefString("PortableMirror", "MirrorKeybind", "Alpha1", "Toggle Mirror Keybind");
+            MelonPreferences.CreateCategory("PortableMirror", "PortableMirror");
+            MelonPreferences.CreateEntry("PortableMirror", "MirrorScaleX", 5f, "Mirror Scale X");
+            MelonPreferences.CreateEntry("PortableMirror", "MirrorScaleY", 3f, "Mirror Scale Y");
+            MelonPreferences.CreateEntry("PortableMirror", "OptimizedMirror", false, "Optimized Mirror");
+            MelonPreferences.CreateEntry("PortableMirror", "CanPickupMirror", false, "Can Pickup Mirror");
+            MelonPreferences.CreateEntry("PortableMirror", "MirrorKeybind", "Alpha1", "Toggle Mirror Keybind");
 
-            _mirrorScaleX = ModPrefs.GetFloat("PortableMirror", "MirrorScaleX");
-            _mirrorScaleY = ModPrefs.GetFloat("PortableMirror", "MirrorScaleY");
-            _optimizedMirror = ModPrefs.GetBool("PortableMirror", "OptimizedMirror");
-            _canPickupMirror = ModPrefs.GetBool("PortableMirror", "CanPickupMirror");
+            _mirrorScaleX = MelonPreferences.GetEntryValue<float>("PortableMirror", "MirrorScaleX");
+            _mirrorScaleY = MelonPreferences.GetEntryValue<float>("PortableMirror", "MirrorScaleY");
+            _optimizedMirror = MelonPreferences.GetEntryValue<bool>("PortableMirror", "OptimizedMirror");
+            _canPickupMirror = MelonPreferences.GetEntryValue<bool>("PortableMirror", "CanPickupMirror");
             _mirrorKeybind = Utils.GetMirrorKeybind();
 
-            MelonModLogger.Log("Settings can be configured in UserData\\MelonPreferences.cfg");
-            MelonModLogger.Log($"[{_mirrorKeybind}] -> Toggle portable mirror");
+            MelonLogger.Msg("Settings can be configured in UserData\\MelonPreferences.cfg");
+            MelonLogger.Msg($"[{_mirrorKeybind}] -> Toggle portable mirror");
 
-            MelonMod uiExpansionKit = MelonLoader.Main.Mods.Find(m => m.InfoAttribute.Name == "UI Expansion Kit");
+            MelonMod uiExpansionKit = MelonHandler.Mods.Find(m => m.Info.Name == "UI Expansion Kit");
             if (uiExpansionKit != null)
             {
-                uiExpansionKit.InfoAttribute.SystemType.Assembly.GetTypes().First(t => t.FullName == "UIExpansionKit.API.ExpansionKitApi").GetMethod("RegisterWaitConditionBeforeDecorating", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static).Invoke(null, new object[]
+                uiExpansionKit.Info.SystemType.Assembly.GetTypes().First(t => t.FullName == "UIExpansionKit.API.ExpansionKitApi").GetMethod("RegisterWaitConditionBeforeDecorating", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static).Invoke(null, new object[]
                 {
                     CreateQuickMenuButton()
                 });
             }
         }
 
-        public override void OnModSettingsApplied()
+        public override void OnPreferencesSaved()
         {
             _oldMirrorScaleY = _mirrorScaleY;
-            _mirrorScaleX = ModPrefs.GetFloat("PortableMirror", "MirrorScaleX");
-            _mirrorScaleY = ModPrefs.GetFloat("PortableMirror", "MirrorScaleY");
-            _optimizedMirror = ModPrefs.GetBool("PortableMirror", "OptimizedMirror");
-            _canPickupMirror = ModPrefs.GetBool("PortableMirror", "CanPickupMirror");
+            _mirrorScaleX = MelonPreferences.GetEntryValue<float>("PortableMirror", "MirrorScaleX");
+            _mirrorScaleY = MelonPreferences.GetEntryValue<float>("PortableMirror", "MirrorScaleY");
+            _optimizedMirror = MelonPreferences.GetEntryValue<bool>("PortableMirror", "OptimizedMirror");
+            _canPickupMirror = MelonPreferences.GetEntryValue<bool>("PortableMirror", "CanPickupMirror");
             _mirrorKeybind = Utils.GetMirrorKeybind();
 
             if (_mirror != null && Utils.GetVRCPlayer() != null)
@@ -69,7 +73,7 @@ namespace PortableMirror
         {
             while (QuickMenu.prop_QuickMenu_0 == null) yield return null;
 
-            ExpansionKitApi.RegisterSimpleMenuButton(ExpandedMenu.QuickMenu, "Toggle\nPortable\nMirror", new Action(() =>
+            ExpansionKitApi.GetExpandedMenu(ExpandedMenu.QuickMenu).AddSimpleButton("Toggle\nPortable\nMirror", new Action(() =>
             {
                 if (Utils.GetVRCPlayer() == null) return;
                 ToggleMirror();
